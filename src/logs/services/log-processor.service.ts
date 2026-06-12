@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { IFailureRepository } from '../repositories/failure.repository.interface';
 import { FAILURE_REPOSITORY } from '../repositories/failure.repository.interface';
 import type { ILogRepository } from '../repositories/log.repository.interface';
@@ -18,7 +18,10 @@ export class LogProcessorService {
     private readonly failureRepository: IFailureRepository,
   ) {}
 
+  private readonly logger = new Logger(LogProcessorService.name);
+
   async process(filePath: string): Promise<ProcessResult> {
+    this.logger.log(`Processing started: ${filePath}`);
     const start = Date.now();
     let totalLines = 0;
     let inserted = 0;
@@ -26,6 +29,9 @@ export class LogProcessorService {
 
     for await (const rawLine of this.reader.readLines(filePath)) {
       totalLines++;
+      if (totalLines % 1_000 === 0) {
+        this.logger.log(`Progress: ${totalLines} lines processed...`);
+      }
       const lineHash = sha256(rawLine);
 
       let entry;
@@ -56,11 +62,17 @@ export class LogProcessorService {
       }
     }
 
-    return {
+    const result = {
       inserted,
       skipped: totalLines - inserted - failed,
       failed,
       durationMs: Date.now() - start,
     };
+
+    this.logger.log(
+      `Processing done — total=${totalLines} inserted=${result.inserted} skipped=${result.skipped} failed=${result.failed} durationMs=${result.durationMs}`,
+    );
+
+    return result;
   }
 }
