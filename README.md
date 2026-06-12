@@ -1,98 +1,177 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# API Gateway Log Processor
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Serviço HTTP em NestJS que processa arquivos de log NDJSON do API Gateway de forma incremental, persiste os registros em MySQL e exporta relatórios CSV.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Pré-requisitos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Docker](https://docs.docker.com/get-docker/) 24+
+- [Docker Compose](https://docs.docker.com/compose/install/) v2 (`docker compose`, não `docker-compose`)
 
-## Project setup
+---
+
+## Configuração
+
+1. Clone o repositório e acesse a pasta do projeto:
 
 ```bash
-$ npm install
+git clone <url-do-repositorio>
+cd <pasta-do-repositorio>/solution
 ```
 
-## Compile and run the project
+2. Copie o arquivo de exemplo:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cp .env.example .env
 ```
 
-## Run tests
+O `.env` padrão já está configurado para funcionar com o Docker Compose:
+
+```env
+DATABASE_URL=mysql://appuser:apppassword@mysql:3306/gateway_logs
+PORT=3000
+```
+
+> Não altere o host `mysql` — é o nome do serviço definido no `docker-compose.yml`.
+
+---
+
+## Subindo a stack
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker compose up --build
 ```
 
-## Deployment
+O comando irá:
+1. Construir a imagem da aplicação
+2. Iniciar o MySQL 8 e aguardar o healthcheck
+3. Executar `prisma migrate deploy` automaticamente
+4. Iniciar a aplicação na porta `3000`
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Para rodar em background:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+docker compose up --build -d
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Para parar e remover os containers:
 
-## Resources
+```bash
+docker compose down
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## Documentação interativa (Swagger)
 
-## Support
+Acesse no navegador após subir a stack:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+http://localhost:3000/api
+```
 
-## Stay in touch
+O JSON OpenAPI está disponível em:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```
+http://localhost:3000/api-json
+```
 
-## License
+---
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Endpoints
+
+### POST /logs/process
+
+Processa um arquivo de log NDJSON e persiste os registros no banco de forma idempotente.
+
+```bash
+curl -X POST http://localhost:3000/logs/process \
+  -H "Content-Type: application/json" \
+  -d '{"filePath": "/caminho/absoluto/para/arquivo.ndjson"}'
+```
+
+> O caminho deve ser acessível pelo container. Para processar um arquivo local, monte-o como volume no `docker-compose.yml`, por exemplo:
+> ```yaml
+> volumes:
+>   - /caminho/local:/data
+> ```
+> E use `"filePath": "/data/arquivo.ndjson"` na requisição.
+
+**Resposta (`200 OK`):**
+
+```json
+{
+  "inserted": 142,
+  "skipped": 8,
+  "failed": 2,
+  "durationMs": 317
+}
+```
+
+| Campo        | Descrição                                                                                     |
+|--------------|-----------------------------------------------------------------------------------------------|
+| `inserted`   | Linhas novas inseridas com sucesso                                                            |
+| `skipped`    | Linhas ignoradas por já existirem no banco (duplicatas identificadas por hash SHA-256)        |
+| `failed`     | Linhas que falharam no parse JSON/Zod ou no insert — detalhes salvos em `gateway_log_failures` |
+| `durationMs` | Tempo total de processamento em milissegundos                                                 |
+
+---
+
+### POST /logs/export
+
+Exporta um relatório CSV com base no tipo informado. A resposta é um arquivo para download direto.
+
+```bash
+curl -X POST http://localhost:3000/logs/export \
+  -H "Content-Type: application/json" \
+  -d '{"type": "consumer"}' \
+  --output consumer_report.csv
+```
+
+**Tipos disponíveis:**
+
+| `type`     | Descrição                                    | Colunas do CSV                                                      |
+|------------|----------------------------------------------|---------------------------------------------------------------------|
+| `consumer` | Total de requisições agrupado por consumidor | `consumer_id`, `total_requests`                                     |
+| `service`  | Total de requisições agrupado por serviço    | `service_name`, `total_requests`                                    |
+| `latency`  | Latência média agrupada por serviço          | `service_name`, `avg_proxy_ms`, `avg_gateway_ms`, `avg_request_ms` |
+
+**Resposta (`200 OK`):** arquivo CSV com header UTF-8, sem BOM.
+
+Exemplos para cada tipo:
+
+```bash
+# Relatório por consumidor
+curl -X POST http://localhost:3000/logs/export \
+  -H "Content-Type: application/json" \
+  -d '{"type": "consumer"}' --output consumer.csv
+
+# Relatório por serviço
+curl -X POST http://localhost:3000/logs/export \
+  -H "Content-Type: application/json" \
+  -d '{"type": "service"}' --output service.csv
+
+# Relatório de latência média
+curl -X POST http://localhost:3000/logs/export \
+  -H "Content-Type: application/json" \
+  -d '{"type": "latency"}' --output latency.csv
+```
+
+---
+
+## Testes
+
+**Unitários:**
+
+```bash
+npm test
+```
+
+**Integração (requer Docker):**
+
+```bash
+npm run test:e2e
+```
+
+Os testes de integração sobem um container MySQL isolado via Testcontainers, executam as migrations e destroem o banco ao final — sem estado residual.
