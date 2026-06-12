@@ -1,12 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  FAILURE_REPOSITORY,
-  IFailureRepository,
-} from '../repositories/failure.repository.interface';
-import {
-  ILogRepository,
-  LOG_REPOSITORY,
-} from '../repositories/log.repository.interface';
+import type { IFailureRepository } from '../repositories/failure.repository.interface';
+import { FAILURE_REPOSITORY } from '../repositories/failure.repository.interface';
+import type { ILogRepository } from '../repositories/log.repository.interface';
+import { LOG_REPOSITORY } from '../repositories/log.repository.interface';
+import { sha256 } from '../../common/hash.util';
 import { LogParserService } from './log-parser.service';
 import { LogReaderService } from './log-reader.service';
 
@@ -35,6 +32,7 @@ export class LogProcessorService {
 
     for await (const rawLine of this.reader.readLines(filePath)) {
       totalLines++;
+      const lineHash = sha256(rawLine);
 
       let entry;
       try {
@@ -42,7 +40,7 @@ export class LogProcessorService {
       } catch (err) {
         failed++;
         await this.failureRepository.save({
-          lineHash: '',
+          lineHash,
           rawLine,
           errorMessage: err instanceof Error ? err.message : String(err),
         });
