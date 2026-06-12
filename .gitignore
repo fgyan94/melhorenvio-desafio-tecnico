@@ -39,3 +39,5 @@ Thumbs.db
 # Optional: Docker logs and data directories
 ch_data/
 docker-compose.override.yml
+
+logs/*
