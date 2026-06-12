@@ -4,15 +4,9 @@ import { FAILURE_REPOSITORY } from '../repositories/failure.repository.interface
 import type { ILogRepository } from '../repositories/log.repository.interface';
 import { LOG_REPOSITORY } from '../repositories/log.repository.interface';
 import { sha256 } from '../../common/hash.util';
+import type { ProcessResult } from '../interfaces/process-result.interface';
 import { LogParserService } from './log-parser.service';
 import { LogReaderService } from './log-reader.service';
-
-export interface ProcessResult {
-  inserted: number;
-  skipped: number;
-  failed: number;
-  durationMs: number;
-}
 
 @Injectable()
 export class LogProcessorService {
