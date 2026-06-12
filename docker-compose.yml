@@ -27,6 +27,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    volumes:
+      - ./logs:/data/logs
 
 volumes:
   mysql_data:
