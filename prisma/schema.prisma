@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model GatewayLog {
+  id                  Int       @id @default(autoincrement()) @db.UnsignedInt
+  line_hash           String    @unique @db.Char(64)
+  consumer_id         String?   @db.VarChar(255)
+  service_id          String?   @db.VarChar(255)
+  service_name        String?   @db.VarChar(255)
+  route_id            String?   @db.VarChar(255)
+  request_method      String?   @db.VarChar(10)
+  request_uri         String?   @db.Text
+  request_url         String?   @db.Text
+  request_size        Int?
+  request_querystring String?   @db.Text
+  response_status     Int?      @db.SmallInt
+  response_size       Int?
+  upstream_uri        String?   @db.Text
+  client_ip           String?   @db.VarChar(45)
+  latency_proxy       Int?
+  latency_gateway     Int?
+  latency_request     Int?
+  created_at          DateTime? @db.DateTime(3)
+  processed_at        DateTime  @default(now()) @db.DateTime(3)
+
+  @@index([consumer_id])
+  @@index([service_name])
+  @@map("gateway_logs")
+}
+
+model GatewayLogFailure {
+  id            Int      @id @default(autoincrement()) @db.UnsignedInt
+  line_hash     String   @db.Char(64)
+  raw_line      String   @db.MediumText
+  error_message String   @db.Text
+  failed_at     DateTime @default(now()) @db.DateTime(3)
+
+  @@map("gateway_log_failures")
+}
