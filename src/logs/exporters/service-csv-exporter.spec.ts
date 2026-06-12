@@ -1,6 +1,8 @@
 import { ServiceCsvExporter } from './service-csv-exporter';
 
-function makePrisma(rows: { service_name: string; total_requests: bigint | number }[]) {
+function makePrisma(
+  rows: { service_name: string; total_requests: bigint | number }[],
+) {
   return { $queryRaw: jest.fn().mockResolvedValue(rows) };
 }
 
@@ -16,7 +18,9 @@ describe('ServiceCsvExporter', () => {
   });
 
   it('(b) null service_name becomes "unknown" via COALESCE', async () => {
-    const prisma = makePrisma([{ service_name: 'unknown', total_requests: 2n }]);
+    const prisma = makePrisma([
+      { service_name: 'unknown', total_requests: 2n },
+    ]);
     const exporter = new ServiceCsvExporter(prisma as never);
 
     const csv = await exporter.export();

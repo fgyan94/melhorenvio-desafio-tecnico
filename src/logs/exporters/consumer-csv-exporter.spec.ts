@@ -1,6 +1,8 @@
 import { ConsumerCsvExporter } from './consumer-csv-exporter';
 
-function makePrisma(rows: { consumer_id: string; total_requests: bigint | number }[]) {
+function makePrisma(
+  rows: { consumer_id: string; total_requests: bigint | number }[],
+) {
   return { $queryRaw: jest.fn().mockResolvedValue(rows) };
 }
 
@@ -16,7 +18,9 @@ describe('ConsumerCsvExporter', () => {
   });
 
   it('(b) null consumer_id becomes "anonymous" via COALESCE', async () => {
-    const prisma = makePrisma([{ consumer_id: 'anonymous', total_requests: 3n }]);
+    const prisma = makePrisma([
+      { consumer_id: 'anonymous', total_requests: 3n },
+    ]);
     const exporter = new ConsumerCsvExporter(prisma as never);
 
     const csv = await exporter.export();

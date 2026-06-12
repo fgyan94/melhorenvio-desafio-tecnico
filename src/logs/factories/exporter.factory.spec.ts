@@ -24,6 +24,8 @@ describe('ExporterFactory', () => {
 
   it('(d) unknown type throws BadRequestException', () => {
     const factory = new ExporterFactory(prisma as never);
-    expect(() => factory.create('unknown' as never)).toThrow(BadRequestException);
+    expect(() => factory.create('unknown' as never)).toThrow(
+      BadRequestException,
+    );
   });
 });

@@ -30,9 +30,7 @@ function makeReader(lines: string[]) {
   };
 }
 
-function makeParser(
-  behaviour: ('ok' | 'fail')[],
-): { parse: jest.Mock } {
+function makeParser(behaviour: ('ok' | 'fail')[]): { parse: jest.Mock } {
   let callCount = 0;
   return {
     parse: jest.fn().mockImplementation(() => {
@@ -62,12 +60,7 @@ function buildService(
   logRepo: ReturnType<typeof makeLogRepo>,
   failureRepo: ReturnType<typeof makeFailureRepo>,
 ) {
-  return new LogProcessorService(
-    reader as never,
-    parser as never,
-    logRepo as never,
-    failureRepo as never,
-  );
+  return new LogProcessorService(reader, parser, logRepo, failureRepo);
 }
 
 describe('LogProcessorService', () => {

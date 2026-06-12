@@ -96,6 +96,8 @@ describe('LogsController (e2e)', () => {
       .expect(200);
 
     expect(res.headers['content-type']).toContain('text/csv');
-    expect(res.text).toContain('service_name,avg_proxy_ms,avg_gateway_ms,avg_request_ms');
+    expect(res.text).toContain(
+      'service_name,avg_proxy_ms,avg_gateway_ms,avg_request_ms',
+    );
   });
 });

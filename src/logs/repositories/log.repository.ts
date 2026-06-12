@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import {
-  ILogRepository,
-  MappedLogEntry,
-} from './log.repository.interface';
+import { ILogRepository, MappedLogEntry } from './log.repository.interface';
 
 @Injectable()
 export class LogRepository implements ILogRepository {

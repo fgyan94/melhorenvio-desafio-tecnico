@@ -24,7 +24,7 @@ export class LatencyCsvExporter implements ICsvExporter {
 
     const lines = ['service_name,avg_proxy_ms,avg_gateway_ms,avg_request_ms'];
     for (const row of rows) {
-      const proxy   = Number(row.avg_proxy_ms).toFixed(2);
+      const proxy = Number(row.avg_proxy_ms).toFixed(2);
       const gateway = Number(row.avg_gateway_ms).toFixed(2);
       const request = Number(row.avg_request_ms).toFixed(2);
       lines.push(`${row.service_name},${proxy},${gateway},${request}`);

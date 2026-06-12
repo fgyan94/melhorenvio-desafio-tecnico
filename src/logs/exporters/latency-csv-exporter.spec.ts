@@ -14,7 +14,12 @@ function makePrisma(rows: LatencyRow[]) {
 describe('LatencyCsvExporter', () => {
   it('(a) rounds latency values to 2 decimal places', async () => {
     const prisma = makePrisma([
-      { service_name: 'svc', avg_proxy_ms: 10.1234, avg_gateway_ms: 5.6789, avg_request_ms: 20.9999 },
+      {
+        service_name: 'svc',
+        avg_proxy_ms: 10.1234,
+        avg_gateway_ms: 5.6789,
+        avg_request_ms: 20.9999,
+      },
     ]);
     const exporter = new LatencyCsvExporter(prisma as never);
 
@@ -26,7 +31,12 @@ describe('LatencyCsvExporter', () => {
 
   it('(b) null service_name becomes "unknown" via COALESCE', async () => {
     const prisma = makePrisma([
-      { service_name: 'unknown', avg_proxy_ms: 1, avg_gateway_ms: 2, avg_request_ms: 3 },
+      {
+        service_name: 'unknown',
+        avg_proxy_ms: 1,
+        avg_gateway_ms: 2,
+        avg_request_ms: 3,
+      },
     ]);
     const exporter = new LatencyCsvExporter(prisma as never);
 
@@ -38,9 +48,24 @@ describe('LatencyCsvExporter', () => {
 
   it('(c) rows are ordered DESC by avg_request_ms (as returned by query)', async () => {
     const prisma = makePrisma([
-      { service_name: 'slow',   avg_proxy_ms: 100, avg_gateway_ms: 10, avg_request_ms: 500 },
-      { service_name: 'medium', avg_proxy_ms: 50,  avg_gateway_ms: 5,  avg_request_ms: 200 },
-      { service_name: 'fast',   avg_proxy_ms: 10,  avg_gateway_ms: 1,  avg_request_ms: 50  },
+      {
+        service_name: 'slow',
+        avg_proxy_ms: 100,
+        avg_gateway_ms: 10,
+        avg_request_ms: 500,
+      },
+      {
+        service_name: 'medium',
+        avg_proxy_ms: 50,
+        avg_gateway_ms: 5,
+        avg_request_ms: 200,
+      },
+      {
+        service_name: 'fast',
+        avg_proxy_ms: 10,
+        avg_gateway_ms: 1,
+        avg_request_ms: 50,
+      },
     ]);
     const exporter = new LatencyCsvExporter(prisma as never);
 
