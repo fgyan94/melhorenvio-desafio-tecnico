@@ -1,0 +1,41 @@
+# Compiled output
+/dist
+/node_modules
+
+# Build logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.development
+.env.production
+.env.local
+.env.*.local
+
+# IDEs and editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# TypeScript cache
+*.tsbuildinfo
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# NestJS CLI and testing caches
+/.nest
+/coverage
+/.nyc_output
+
+# Optional: Docker logs and data directories
+ch_data/
+docker-compose.override.yml
