@@ -1,27 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sha256 } from '../../common/hash.util';
+import { MappedLogEntry } from '../repositories/log.repository.interface';
 import { LogEntrySchema } from '../schemas/log-entry.schema';
-
-export interface MappedLogEntry {
-  line_hash: string;
-  consumer_id: string | null;
-  service_id: string | null;
-  service_name: string | null;
-  route_id: string | null;
-  request_method: string | null;
-  request_uri: string | null;
-  request_url: string | null;
-  request_size: number | null;
-  request_querystring: string | null;
-  response_status: number | null;
-  response_size: number | null;
-  upstream_uri: string | null;
-  client_ip: string | null;
-  latency_proxy: number | null;
-  latency_gateway: number | null;
-  latency_request: number | null;
-  created_at: Date | null;
-}
 
 @Injectable()
 export class LogParserService {
