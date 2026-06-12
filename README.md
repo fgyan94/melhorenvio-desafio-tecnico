@@ -2,6 +2,8 @@
 
 Serviço HTTP em NestJS que processa arquivos de log NDJSON do API Gateway de forma incremental, persiste os registros em MySQL e exporta relatórios CSV.
 
+> Para detalhes sobre as decisões de design e arquitetura, consulte [`docs/decisoes-tecnicas.md`](docs/decisoes-tecnicas.md).
+
 ---
 
 ## Pré-requisitos
