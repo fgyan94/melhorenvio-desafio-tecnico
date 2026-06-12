@@ -85,18 +85,22 @@ http://localhost:3000/api-json
 
 Processa um arquivo de log NDJSON e persiste os registros no banco de forma idempotente.
 
+**Passo 1 — Coloque o arquivo na pasta `logs/` na raiz do projeto:**
+
+```
+logs/
+└── seu-arquivo.ndjson   ← coloque aqui
+```
+
+**Passo 2 — Faça a requisição usando o caminho `/data/logs/` dentro do container:**
+
 ```bash
 curl -X POST http://localhost:3000/logs/process \
   -H "Content-Type: application/json" \
-  -d '{"filePath": "/caminho/absoluto/para/arquivo.ndjson"}'
+  -d '{"filePath": "/data/logs/seu-arquivo.ndjson"}'
 ```
 
-> O caminho deve ser acessível pelo container. Para processar um arquivo local, monte-o como volume no `docker-compose.yml`, por exemplo:
-> ```yaml
-> volumes:
->   - /caminho/local:/data
-> ```
-> E use `"filePath": "/data/arquivo.ndjson"` na requisição.
+> O diretório `logs/` da raiz do projeto é montado automaticamente como `/data/logs/` dentro do container pelo `docker-compose.yml`. Qualquer arquivo colocado em `logs/` fica acessível pelo caminho `/data/logs/nome-do-arquivo`.
 
 **Resposta (`200 OK`):**
 
