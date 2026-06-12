@@ -368,3 +368,14 @@ docker compose up
             └─► nest start
                     └─► Swagger disponível em http://localhost:3000/api
 ```
+
+---
+
+## Acesso a Arquivos no Docker
+
+O campo `filePath` recebido pelo endpoint `POST /logs/process` refere-se ao caminho **dentro do container**, não no host.
+
+O projeto disponibiliza o diretório `logs/` na raiz do repositório, que é montado automaticamente como volume pelo `docker-compose.yml`. O usuário deve colocar o arquivo NDJSON nesse diretório e usar o caminho correspondente dentro do container:
+
+- Host: `./logs/arquivo.(ndjson|txt)`
+- Container: `/data/logs/arquivo.ndjson`

@@ -205,6 +205,26 @@ Tarefas ordenadas por dependência. Cada grupo só começa após o anterior esta
 
 ---
 
+### T24 — Adicionar diretório de logs e volume no Docker Compose
+
+**O que:** Criar `logs/.gitkeep` para versionar o diretório e adicionar o volume `./logs:/data/logs` no serviço `app` do `docker-compose.yml`.
+
+**Critério:** `docker compose up --build` sobe normalmente; arquivos colocados em `./logs/` são acessíveis em `/data/logs/` dentro do container.
+
+**Commit:** `chore(docker): add logs volume mount for file processing`
+
+---
+
+### T25 — Atualizar README com o novo workflow de arquivos
+
+**O que:** Atualizar a seção do endpoint `POST /logs/process` no README para documentar o uso do diretório `logs/` e o caminho correto no request.
+
+**Critério:** README explica onde colocar o arquivo e qual `filePath` usar na requisição.
+
+**Commit:** `docs(readme): document logs directory and volume mount usage`
+
+---
+
 ## Resumo de Dependências
 
 ```
@@ -221,5 +241,5 @@ T01 → T02 → T03 → T04
           → T15 ├→ T17 → T18 → T19 → T20
           → T16 ┘
                               ↓
-                     T21 → T22 → T23
+                     T21 → T22 → T23 → T24 → T25
 ```
