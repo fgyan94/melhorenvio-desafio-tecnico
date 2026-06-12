@@ -133,4 +133,18 @@ describe('LogProcessorService', () => {
     expect(result.failed).toBe(1);
     expect(failureRepo.save).toHaveBeenCalledTimes(1);
   });
+
+  it('parse failure saves a non-empty lineHash to failure repository', async () => {
+    const reader = makeReader(['bad line']);
+    const parser = makeParser(['fail']);
+    const logRepo = makeLogRepo([]);
+    const failureRepo = makeFailureRepo();
+    const service = buildService(reader, parser, logRepo, failureRepo);
+
+    await service.process('/any/path');
+
+    expect(failureRepo.save).toHaveBeenCalledTimes(1);
+    const savedData = failureRepo.save.mock.calls[0][0];
+    expect(savedData.lineHash).toMatch(/^[0-9a-f]{64}$/);
+  });
 });
